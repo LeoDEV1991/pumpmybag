@@ -100,6 +100,14 @@ function Home() {
 
 
   useEffect(() => {
+    function sleep(milliseconds) {
+      var start = new Date().getTime();
+      for(let i = 0; i < 1e7; i++) {
+        if((new Date().getTime() - start) > milliseconds){
+          break;
+        }
+      }
+    }
     // const coinList = [];
     let coinList = [];
     for(let i = 0; i < 12; i++)
@@ -115,8 +123,8 @@ function Home() {
           console.log(coinList);
         }      
       });  
-    }    
-    console.log('---------');    
+      sleep(100);
+    }  
   }, []);
   
   

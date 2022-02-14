@@ -205,60 +205,92 @@ function CoinCompare(props) {
   return (          
     <VuiBox pt={10} px={3}>
         <Card style={{paddingTop:"1rem", paddingBottom:"0.5rem"}}>            
-            <VuiBox display="flex" flexDirection="column" alignItems="center" justifyContent="center" width="300px">                    
-                <VuiBox mt={2} mb={1} width="100%">                    
-                    <VuiInput 
-                        id="date" 
-                        type="text" 
-                        value={inputDate} 
-                        placeholder="dd-mm-yyyy" 
-                        error={isInvalid} 
-                        onInput={handleInput} 
-                        onChange={handleChange}
-                        inputProps={{style:{textAlign:"center"}}}
-                    >
-                    </VuiInput>
-                </VuiBox> 
-                <VuiBox mt={1} mb={2} width="100%">                    
-                    <VuiInput 
-                        id="currentDate" 
-                        type="tel" 
-                        value={currentDate} 
-                        placeholder={currentDate} 
-                        error={isInvalid1} 
-                        onInput={handleInput1}
-                        onChange={handleChange1}
-                        inputProps={{style:{textAlign:"center"}}}
-                    >
-                    </VuiInput>
-                </VuiBox> 
-                <VuiBox width="100%" pb={2}>
-                    <VuiButton id="judgeButton" variant="gradient" color="info" size="small" fullWidth onClick={judgeCoin} >
-                        Please pump my bags!
-                    </VuiButton>
-                </VuiBox>
-                {showJudgeValue && <VuiBox display="flex" flexDirection="column" alignItems="center" justifyContent="center" pb={1} >                       
-                    <VuiBox>                            
-                        <VuiBox display="flex" flexDirection="row" alignItems="center" justifyContent="flex-end">
+            <VuiBox display="flex" flexDirection="column" alignItems="center" justifyContent="center" >     
+                <VuiBox display="flex" justifyContent="center">                           
+                    <VuiBox py={1} pr={2} width="300px">                    
+                        <VuiInput 
+                            id="date" 
+                            type="text" 
+                            value={inputDate} 
+                            placeholder="dd-mm-yyyy" 
+                            error={isInvalid} 
+                            onInput={handleInput} 
+                            onChange={handleChange}
+                            inputProps={{style:{textAlign:"center"}}}
+                        >
+                        </VuiInput>
+                    </VuiBox> 
+                    <VuiBox py={1} pl={2} width="300px">                    
+                        <VuiInput 
+                            id="currentDate" 
+                            type="tel" 
+                            value={currentDate} 
+                            placeholder={currentDate} 
+                            error={isInvalid1} 
+                            onInput={handleInput1}
+                            onChange={handleChange1}
+                            inputProps={{style:{textAlign:"center"}}}
+                        >
+                        </VuiInput>
+                    </VuiBox> 
+                </VuiBox>    
+                <VuiBox display="flex" justifyContent="center" width="100%" mt={2}>
+                    {showJudgeValue && 
+                        <VuiBox display="flex" justifyContent="center" alignItems="center" width="30%">
                             <img
                                 loading="lazy"                        
                                 src={props.firstCoinImage}                                            
                                 alt=""    
-                                style={{width:"2rem", height:"2rem", marginRight:"1rem"}}                   
+                                style={{width:"3rem", height:"3rem", marginRight:"1rem"}}                   
                             />
-                            <h3 id="judgeValue" style={{color:"white"}}>
+                        </VuiBox>
+                    }       
+                    <VuiBox display="flex" flexDirection="column" justifyContent="center" alignItems="center" width="40%" pb={2}>
+                        <VuiButton id="judgeButton" variant="gradient" color="info" size="small" fullWidth  onClick={judgeCoin} >
+                            Please pump my bags!
+                        </VuiButton>
+                        {showJudgeValue && 
+                            <h3 id="judgeValue" style={{color:"white", marginTop:"1rem"}}>
                                 {/* {props.swapped? (-1) * judgeValue: judgeValue} */}
-                                pumps{' ' + judgeValue}
+                                {judgeValue + ' ' }pumps
                             </h3>
+                        }
+                    </VuiBox>
+                    {showJudgeValue && 
+                        <VuiBox display="flex" justifyContent="center" alignItems="center" width="30%">
                             <img
                                 loading="lazy"                        
                                 src={props.secondCoinImage}                                            
                                 alt=""    
-                                style={{width:"2rem", height:"2rem", marginLeft:"1rem"}}                   
-                            />                                                   
+                                style={{width:"3rem", height:"3rem", marginLeft:"1rem"}}                   
+                            />    
                         </VuiBox>
-                    </VuiBox>
-                </VuiBox>}
+                    }
+                    {
+                        // showJudgeValue && <VuiBox display="flex" flexDirection="column" alignItems="center" justifyContent="center" pb={1} >                       
+                        //     <VuiBox>                            
+                        //         <VuiBox display="flex" flexDirection="row" alignItems="center" justifyContent="flex-end">
+                        //             <img
+                        //                 loading="lazy"                        
+                        //                 src={props.firstCoinImage}                                            
+                        //                 alt=""    
+                        //                 style={{width:"2rem", height:"2rem", marginRight:"1rem"}}                   
+                        //             />
+                        //             <h3 id="judgeValue" style={{color:"white"}}>
+                        //                 {/* {props.swapped? (-1) * judgeValue: judgeValue} */}
+                        //                 {judgeValue + ' ' }pumps
+                        //             </h3>
+                        //             <img
+                        //                 loading="lazy"                        
+                        //                 src={props.secondCoinImage}                                            
+                        //                 alt=""    
+                        //                 style={{width:"2rem", height:"2rem", marginLeft:"1rem"}}                   
+                        //             />                                                   
+                        //         </VuiBox>
+                        //     </VuiBox>
+                        // </VuiBox>
+                    }
+                </VuiBox>
             </VuiBox>
         </Card>
     </VuiBox>
