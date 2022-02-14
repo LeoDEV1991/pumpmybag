@@ -102,13 +102,13 @@ function Home() {
   useEffect(() => {
     // const coinList = [];
     let coinList = [];
-    for(let i = 0; i < 2; i++)
+    for(let i = 0; i < 12; i++)
     {
       const getCoinURL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=" + (i + 1);
       axios.get(getCoinURL).then((response) => {      
         console.log('++++'+ i + '+++++'); 
         coinList = coinList.concat(response.data);  
-        if(i == 1)
+        if(i == 11)
         {       
           console.log('+++++++++');    
           setCoins(coinList);  
@@ -174,13 +174,13 @@ function Home() {
 
         {showHelp &&
           // <VuiBox pt={10} px={3}>
-          <VuiBox  position="absolute" borderRadius="0.5rem" bgColor='#0f0540' shadow="lg" maxWidth="690px" maxHeight="450px" width="90%" height="90%" zIndex={2} border="solid" overflowX="hidden">
-            <VuiBox  display="flex" justifyContent="center" px={6} py={10} height="80%">
+          <VuiBox  position="absolute" borderRadius="0.5rem" bgColor='#0f0540' shadow="lg" maxWidth="690px" maxHeight="520px" width="90%" height="90%" zIndex={2} border="solid" overflowX="hidden">
+            <VuiBox  display="flex" justifyContent="center" px={6} py={10} height="85%">
               <p style={{color:'white'}}>
               Pumpy my bag is a crypto tool which helps traders identify whether moving their bags from one coin to another gonna help them gain more pump potential
               </p>
             </VuiBox>
-            <VuiBox  bottom={4} display="flex" justifyContent="center">
+            <VuiBox  display="flex" justifyContent="center">
               <VuiBox >
                 <VuiButton variant="gradient" color="info" size="small" fullWidth onClick={handleClose} >
                     I got it
