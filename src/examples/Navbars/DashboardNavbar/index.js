@@ -61,7 +61,7 @@ import {
 import team2 from "assets/images/team-2.jpg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 
-function DashboardNavbar({ absolute, light, isMini }) {
+function DashboardNavbar({ absolute, light, isMini, changeState }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useVisionUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
@@ -95,9 +95,13 @@ function DashboardNavbar({ absolute, light, isMini }) {
   }, [dispatch, fixedNavbar]);
 
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
-  const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
+  // const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
   const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
   const handleCloseMenu = () => setOpenMenu(false);
+
+  const handleHelpClick = () => {
+    changeState(true);
+  }
 
   // Render the notifications menu
   const renderMenu = () => (
@@ -197,9 +201,10 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 size="medium"
                 color="inherit"
                 sx={navbarIconButton}
-                onClick={handleConfiguratorOpen}
+                // onClick={handleConfiguratorOpen}
+                onClick={handleHelpClick}
               >
-                <Icon>settings</Icon>
+                <Icon>help</Icon>
               </IconButton>
               {/* <IconButton
                 size="small"

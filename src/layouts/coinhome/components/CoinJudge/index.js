@@ -53,33 +53,97 @@ function CoinCompare(props) {
 
     const [showJudgeValue, setShowJudgeValue] = useState(false);   
     const [isInvalid, setIsInvalid] = useState(false);   
+    const [isInvalid1, setIsInvalid1] = useState(false);   
     const [judgeValue, setJudgeValue] = useState('---');   
+    const [inputDate, setInputDate] = useState("");   
+    const [currentDate, setCurrentDate] = useState("");   
     useEffect(() => {
-        console.log("judge components is updated");
-        
+        console.log("judge components is created");  
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = today.getFullYear();
+
+        today = dd + '-' + mm + '-' + yyyy;
+        setCurrentDate(today);
     },[]);
     
     const judgeCoin = () => {
         // setIsInvalid(false);
-        const date = document.getElementById('date').value;
-        console.log(date);
+        //const date = document.getElementById('date').value;
+        //const currentDate = document.getElementById('currentDate').value;
+        //console.log(date);
         document.getElementById('judgeButton').setAttribute("disabled", "true");
-        const URL = "https://api.coingecko.com/api/v3/coins/" + props.firstCoin + "/history?date=" + date + "&localization=false";
+        let URL = "https://api.coingecko.com/api/v3/coins/" + props.firstCoin + "/history?date=" + inputDate + "&localization=false";
         axios.get(URL).then((response) => {            
             const responseOne = response.data.market_data.current_price.usd;
-            const URL = "https://api.coingecko.com/api/v3/coins/" + props.secondCoin + "/history?date=" + date + "&localization=false";
+            URL = "https://api.coingecko.com/api/v3/coins/" + props.secondCoin + "/history?date=" + inputDate + "&localization=false";
             axios.get(URL).then((response) => { 
-                const responseTwo = response.data.market_data.current_price.usd;                
-                const currentOne = props.firstCoinPrice;
-                const currentTwo = props.secondCoinPrice;
-                console.log(responseOne, responseTwo, currentOne, currentTwo);
-                const percentageOne = (currentOne == responseOne) ? 100 : (currentOne - responseOne) / responseOne * 100.0;
-                const percentageTwo = (currentTwo == responseTwo) ? 100 : (currentTwo - responseTwo) / responseTwo * 100.0;
-                console.log(percentageOne - percentageTwo);
-                // document.getElementById("judgeValue").innerHTML = (percentageOne - percentageTwo).toFixed(2);
-                setJudgeValue((percentageOne - percentageTwo).toFixed(2));
-                setShowJudgeValue(true);
-                document.getElementById('judgeButton').removeAttribute("disabled");
+                const responseTwo = response.data.market_data.current_price.usd;   
+                //judge if second date is today or not
+                let today = new Date();
+                let dd = String(today.getDate()).padStart(2, '0');
+                let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                let yyyy = today.getFullYear();
+                today = dd + '-' + mm + '-' + yyyy;                  
+                if(currentDate == today) //if today
+                {
+                    console.log("======>>>>>>====== current day is today=====")
+                    const currentOne = props.firstCoinPrice;
+                    const currentTwo = props.secondCoinPrice;
+                    // console.log(responseOne, responseTwo, currentOne, currentTwo);
+                    let percentageOne = 0;
+                    if(responseOne)
+                    {
+                        percentageOne = (currentOne == responseOne) ? 100 : (currentOne - responseOne) / responseOne * 100.0;
+                    }
+                    let percentageTwo = 0;
+                    if(responseTwo)
+                    {
+                        percentageTwo = (currentTwo == responseTwo) ? 100 : (currentTwo - responseTwo) / responseTwo * 100.0;
+                    }
+                    console.log(percentageOne - percentageTwo);
+                    // document.getElementById("judgeValue").innerHTML = (percentageOne - percentageTwo).toFixed(2);
+                    setJudgeValue(((percentageOne - percentageTwo)/1000).toFixed(6));
+                    setShowJudgeValue(true);
+                    document.getElementById('judgeButton').removeAttribute("disabled");
+                }
+                else
+                {
+                    URL = "https://api.coingecko.com/api/v3/coins/" + props.firstCoin + "/history?date=" + currentDate + "&localization=false";
+                    axios.get(URL).then((response) => { 
+                        const currentOne = response.data.market_data.current_price.usd;
+                        URL = "https://api.coingecko.com/api/v3/coins/" + props.secondCoin + "/history?date=" + currentDate + "&localization=false";
+                        axios.get(URL).then((response) => { 
+                            const currentTwo = response.data.market_data.current_price.usd;
+                            // console.log(responseOne, responseTwo, currentOne, currentTwo);
+                            let percentageOne = 0;
+                            if(responseOne)
+                            {
+                                percentageOne = (currentOne == responseOne) ? 100 : (currentOne - responseOne) / responseOne * 100.0;
+                            }
+                            let percentageTwo = 0;
+                            if(responseTwo)
+                            {
+                                percentageTwo = (currentTwo == responseTwo) ? 100 : (currentTwo - responseTwo) / responseTwo * 100.0;
+                            }
+                            console.log(percentageOne - percentageTwo);
+                            // document.getElementById("judgeValue").innerHTML = (percentageOne - percentageTwo).toFixed(2);
+                            setJudgeValue(((percentageOne - percentageTwo)/1000).toFixed(6));
+                            setShowJudgeValue(true);
+                            document.getElementById('judgeButton').removeAttribute("disabled");
+                        }) 
+                    })
+                    .catch((error) => {
+                        // handle error
+                        console.log(error);
+                        setIsInvalid1(true);
+                        document.getElementById('judgeButton').removeAttribute("disabled");
+                    })
+                    .then(() => {
+                    // always executed
+                    }); 
+                }
             }); 
         })
         .catch((error) => {
@@ -93,23 +157,84 @@ function CoinCompare(props) {
         }); 
         // setShowJudgeValue(true);
     }
-    const handleChange = () => {
-        console.log("input changed");
+    const handleChange = (e) => {
+        console.log("onChange executed");
+        // console.log(e.target.value);
         setIsInvalid(false);
-
+    }
+    const handleChange1 = (e) => {
+        console.log("onChange1 executed");
+        // console.log(e.target.value);
+        setIsInvalid1(false);
+    }
+    const handleInput = (e) => {
+        console.log("onInput executed");
+        console.log(e.target.value);                       
+        let value = e.target.value;
+        if(value.length >= 11)
+        {
+            return;
+        }
+        let newValue = value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');
+        const dayOrMonth = (index) => index % 2 === 1 && index < 4;
+        // on delete key.  
+        if (!e.nativeEvent.data) {
+            setInputDate(value);
+            return ;
+        }
+        setInputDate(newValue.split('').map((v, i) => dayOrMonth(i) ? v + '-' : v).join(''));
+    }
+    const handleInput1 = (e) => {
+        console.log("onInput1 executed");
+        //console.log(e.target.value);                       
+        let value = e.target.value;
+        if(value.length >= 11)
+        {
+            return;
+        }
+        let newValue = value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');
+        const dayOrMonth = (index) => index % 2 === 1 && index < 4;
+        // on delete key.  
+        if (!e.nativeEvent.data) {
+            setCurrentDate(value);
+            return ;
+        }
+        setCurrentDate(newValue.split('').map((v, i) => dayOrMonth(i) ? v + '-' : v).join(''));
     }
 
   return (          
     <VuiBox pt={10} px={3}>
         <Card style={{paddingTop:"1rem", paddingBottom:"0.5rem"}}>            
             <VuiBox display="flex" flexDirection="column" alignItems="center" justifyContent="center" width="300px">                    
-                <VuiBox mt={2} mb={2} width="100%">                    
-                    <VuiInput id="date" placeholder="dd-mm-yyyy" error={isInvalid} onChange={handleChange}>
+                <VuiBox mt={2} mb={1} width="100%">                    
+                    <VuiInput 
+                        id="date" 
+                        type="text" 
+                        value={inputDate} 
+                        placeholder="dd-mm-yyyy" 
+                        error={isInvalid} 
+                        onInput={handleInput} 
+                        onChange={handleChange}
+                        inputProps={{style:{textAlign:"center"}}}
+                    >
+                    </VuiInput>
+                </VuiBox> 
+                <VuiBox mt={1} mb={2} width="100%">                    
+                    <VuiInput 
+                        id="currentDate" 
+                        type="tel" 
+                        value={currentDate} 
+                        placeholder={currentDate} 
+                        error={isInvalid1} 
+                        onInput={handleInput1}
+                        onChange={handleChange1}
+                        inputProps={{style:{textAlign:"center"}}}
+                    >
                     </VuiInput>
                 </VuiBox> 
                 <VuiBox width="100%" pb={2}>
                     <VuiButton id="judgeButton" variant="gradient" color="info" size="small" fullWidth onClick={judgeCoin} >
-                        Judge
+                        Please pump my bags!
                     </VuiButton>
                 </VuiBox>
                 {showJudgeValue && <VuiBox display="flex" flexDirection="column" alignItems="center" justifyContent="center" pb={1} >                       
@@ -121,9 +246,10 @@ function CoinCompare(props) {
                                 alt=""    
                                 style={{width:"2rem", height:"2rem", marginRight:"1rem"}}                   
                             />
-                            <h1 id="judgeValue" style={{color:"white"}}>
-                                {judgeValue}
-                            </h1>
+                            <h3 id="judgeValue" style={{color:"white"}}>
+                                {/* {props.swapped? (-1) * judgeValue: judgeValue} */}
+                                pumps{' ' + judgeValue}
+                            </h3>
                             <img
                                 loading="lazy"                        
                                 src={props.secondCoinImage}                                            

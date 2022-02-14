@@ -34,7 +34,7 @@ import VuiBox from "components/VuiBox";
 import VuiTypography from "components/VuiTypography";
 import VuiProgress from "components/VuiProgress";
 import VuiInput from "components/VuiInput";
-
+import VuiButton from "components/VuiButton";
 
 
 // Vision UI Dashboard React example components
@@ -82,13 +82,15 @@ import CoinStats from "layouts/coinhome/components/CoinStats";
 
 
 function Home() { 
-  const getCoinURL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1";
+  // const getCoinURL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=10";
+  // const getCoinURL = "https://api.coingecko.com/api/v3/coins/list";
   //state
   const [coins, setCoins] = useState([]);
   const [isFirstCoinSelected, setIsFirstCoinSelected] = useState(false);
   const [isSecondCoinSelected, setIsSecondCoinSelected] = useState(false);
   const [showFirstCoinStats, setShowFirstCoinStats] = useState(false);
   const [showSecondCoinStats, setShowSecondCoinStats] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
 
   const [firstSelectedCoin, setFirstSelectedCoin] = useState(null);
   const [secondSelectedCoin, setSecondSelectedCoin] = useState(null);
@@ -98,10 +100,23 @@ function Home() {
 
 
   useEffect(() => {
-    axios.get(getCoinURL).then((response) => {      
-      setCoins(response.data);         
-    });
-    console.log('+++++++++');    
+    // const coinList = [];
+    let coinList = [];
+    for(let i = 0; i < 2; i++)
+    {
+      const getCoinURL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=" + (i + 1);
+      axios.get(getCoinURL).then((response) => {      
+        console.log('++++'+ i + '+++++'); 
+        coinList = coinList.concat(response.data);  
+        if(i == 1)
+        {       
+          console.log('+++++++++');    
+          setCoins(coinList);  
+          console.log(coinList);
+        }      
+      });  
+    }    
+    console.log('---------');    
   }, []);
   
   
@@ -115,7 +130,8 @@ function Home() {
     }
     else{
       console.log("no select");
-      setIsFirstCoinSelected(false);    
+      setIsFirstCoinSelected(false); 
+      setFirstSelectedCoin(null);   
       setShowFirstCoinStats(false);  
     }  
   }
@@ -130,12 +146,22 @@ function Home() {
     else{
       console.log("no select");
       setIsSecondCoinSelected(false);    
+      setSecondSelectedCoin(null);
       setShowSecondCoinStats(false);  
     }  
   }
+  const handleButtonClick = () => {
+    let tempCoin = firstSelectedCoin;
+    setFirstSelectedCoin(secondSelectedCoin);
+    setSecondSelectedCoin(tempCoin);
+    
+  }
+  const handleClose = () => {
+    setShowHelp(false);    
+  }
   return (      
     <VuiBox height="100vh" display="flex" flexDirection="column" justifyContent="space-between">
-      <DashboardNavbar />
+      <DashboardNavbar  changeState={setShowHelp}/>
       <VuiBox  display="flex" flexDirection="column" alignItems="center" height="100%">      
         {(showFirstCoinStats || showSecondCoinStats) &&
           <VuiBox  position="absolute" borderRadius="0.5rem" bgColor='#0f0540' shadow="lg" maxWidth="720px" maxHeight="650px" width="90%" height="90%" zIndex={2} border="solid" overflowX="hidden">
@@ -145,6 +171,26 @@ function Home() {
             </CoinStats>
           </VuiBox>
         }
+
+        {showHelp &&
+          // <VuiBox pt={10} px={3}>
+          <VuiBox  position="absolute" borderRadius="0.5rem" bgColor='#0f0540' shadow="lg" maxWidth="690px" maxHeight="450px" width="90%" height="90%" zIndex={2} border="solid" overflowX="hidden">
+            <VuiBox  display="flex" justifyContent="center" px={6} py={10} height="80%">
+              <p style={{color:'white'}}>
+              Pumpy my bag is a crypto tool which helps traders identify whether moving their bags from one coin to another gonna help them gain more pump potential
+              </p>
+            </VuiBox>
+            <VuiBox  bottom={4} display="flex" justifyContent="center">
+              <VuiBox >
+                <VuiButton variant="gradient" color="info" size="small" fullWidth onClick={handleClose} >
+                    I got it
+                </VuiButton>
+              </VuiBox>
+            </VuiBox>
+          </VuiBox>
+          // </VuiBox>
+        }
+
         <VuiBox>
           <h2 style={{textAlign:"center", color:"white"}}>
             Pump My Bag
@@ -152,16 +198,16 @@ function Home() {
         </VuiBox>
         <VuiBox display="flex" flexDirection="row" justifyContent="center" mt={5} alignItems="flex-end">
           <VuiBox>
-            <h1 style={{textAlign:"center", fontSize:25}}>
-              Select
-              <span> A</span>
+            <h1 style={{textAlign:"center", fontSize:25, color:"white"}}>
+              Dump it              
             </h1>
             <VuiBox/>
             <VuiBox>
               <Autocomplete
                 disablePortal
                 // freeSolo="true"
-                id="combo-box-demo"
+                id="firstCoin"
+                value={firstSelectedCoin}
                 options={coins}
                 sx={{ width: 300 }}
                 autoHighlight
@@ -171,8 +217,11 @@ function Home() {
                 closeText=""
                 openText=""   
                 onChange={handleChange1}    
+                // getOptionLabel={option => 
+                //   '  ' + option.symbol.toUpperCase() + '  $' + option.current_price
+                // }
                 getOptionLabel={option => 
-                  '  ' + option.symbol.toUpperCase() + '  $' + option.current_price
+                  ' ' + option.name + '(' + option.symbol.toUpperCase() + ')' + '  $' + option.current_price
                 }
                
                 renderOption={(props, option) => (
@@ -212,22 +261,23 @@ function Home() {
             </VuiBox>
           </VuiBox>
           <VuiBox display="flex" position="relative" height="40px" px={1.5} >
-            {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"> */}
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style={{width:"1.5em", color:"white"}}>
-              <path fill="currentColor" d="M0 168v-16c0-13.255 10.745-24 24-24h360V80c0-21.367 25.899-32.042 40.971-16.971l80 80c9.372 9.373 9.372 24.569 0 33.941l-80 80C409.956 271.982 384 261.456 384 240v-48H24c-13.255 0-24-10.745-24-24zm488 152H128v-48c0-21.314-25.862-32.08-40.971-16.971l-80 80c-9.372 9.373-9.372 24.569 0 33.941l80 80C102.057 463.997 128 453.437 128 432v-48h360c13.255 0 24-10.745 24-24v-16c0-13.255-10.745-24-24-24z">
-              </path>
-            </svg>
+            <VuiButton variant="text" onClick={handleButtonClick}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style={{width:"1.5em", color:"white"}}>
+                <path fill="currentColor" d="M0 168v-16c0-13.255 10.745-24 24-24h360V80c0-21.367 25.899-32.042 40.971-16.971l80 80c9.372 9.373 9.372 24.569 0 33.941l-80 80C409.956 271.982 384 261.456 384 240v-48H24c-13.255 0-24-10.745-24-24zm488 152H128v-48c0-21.314-25.862-32.08-40.971-16.971l-80 80c-9.372 9.373-9.372 24.569 0 33.941l80 80C102.057 463.997 128 453.437 128 432v-48h360c13.255 0 24-10.745 24-24v-16c0-13.255-10.745-24-24-24z">
+                </path>
+              </svg>
+            </VuiButton>
           </VuiBox>
           <VuiBox>
-            <h1 style={{textAlign:"center", fontSize:25}}>
-              Select
-              <span> B</span>
+            <h1 style={{textAlign:"center", fontSize:25, color:"white"}}>
+              Pump it
             </h1>
             <VuiBox ml={0} px={0}>
               <Autocomplete
                 disablePortal
                 // freeSolo="true"
-                id="combo-box-demo"
+                id="secondCoin"
+                value={secondSelectedCoin}
                 options={coins}
                 sx={{ width: 300, }}
                 autoHighlight
@@ -238,8 +288,11 @@ function Home() {
                 closeText=""
                 openText=""    
                 onChange={handleChange2}             
+                // getOptionLabel={option => 
+                //   '  ' + option.symbol.toUpperCase() + '  $' + option.current_price
+                // }
                 getOptionLabel={option => 
-                  '  ' + option.symbol.toUpperCase() + '  $' + option.current_price
+                  ' ' + option.name + '(' + option.symbol.toUpperCase() + ')' + '  $' + option.current_price
                 }
                 // PaperComponent={({ children }) => (
                 //   <Paper style={{ background: "yellow"}}>{children}</Paper>
