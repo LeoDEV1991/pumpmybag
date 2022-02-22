@@ -25,10 +25,17 @@ export default {
   html: {
     scrollBehavior: "smooth",
     background: dark.body,
+    height: "100%"
   },
   body: {
     background: `url(${bgAdmin})`,
     backgroundSize: "cover",
+    height:"100%",
+    width:"100%",
+    display:"table"
+  },
+  "#root": {
+    height: "100%"
   },
   "*, *::before, *::after": {
     margin: 0,

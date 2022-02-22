@@ -159,6 +159,7 @@ export default function App() {
     </CacheProvider>
   ) : (
     <ThemeProvider theme={theme}>
+   
       <CssBaseline />
       {/* {layout === "dashboard" && (
         <>
@@ -180,5 +181,6 @@ export default function App() {
         <Redirect from="*" to="/home" />
       </Switch>
     </ThemeProvider>
+    
   );
 }

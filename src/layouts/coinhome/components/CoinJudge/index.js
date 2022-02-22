@@ -48,7 +48,6 @@ import TextField from '@mui/material/TextField';
 import { useState, useEffect } from "react";   
 import axios from "axios";
 
-
 function CoinCompare(props) {
 
     const [showJudgeValue, setShowJudgeValue] = useState(false);   
@@ -68,11 +67,7 @@ function CoinCompare(props) {
         setCurrentDate(today);
     },[]);
     
-    const judgeCoin = () => {
-        // setIsInvalid(false);
-        //const date = document.getElementById('date').value;
-        //const currentDate = document.getElementById('currentDate').value;
-        //console.log(date);
+    const judgeCoin = () => {        
         document.getElementById('judgeButton').setAttribute("disabled", "true");
         let URL = "https://api.coingecko.com/api/v3/coins/" + props.firstCoin + "/history?date=" + inputDate + "&localization=false";
         axios.get(URL).then((response) => {            
@@ -155,16 +150,11 @@ function CoinCompare(props) {
         .then(() => {
         // always executed
         }); 
-        // setShowJudgeValue(true);
     }
     const handleChange = (e) => {
-        console.log("onChange executed");
-        // console.log(e.target.value);
         setIsInvalid(false);
     }
     const handleChange1 = (e) => {
-        console.log("onChange1 executed");
-        // console.log(e.target.value);
         setIsInvalid1(false);
     }
     const handleInput = (e) => {
@@ -185,8 +175,6 @@ function CoinCompare(props) {
         setInputDate(newValue.split('').map((v, i) => dayOrMonth(i) ? v + '-' : v).join(''));
     }
     const handleInput1 = (e) => {
-        console.log("onInput1 executed");
-        //console.log(e.target.value);                       
         let value = e.target.value;
         if(value.length >= 11)
         {
@@ -203,11 +191,11 @@ function CoinCompare(props) {
     }
 
   return (          
-    <VuiBox pt={10} px={3}>
-        <Card style={{paddingTop:"1rem", paddingBottom:"0.5rem"}}>            
-            <VuiBox display="flex" flexDirection="column" alignItems="center" justifyContent="center" >     
-                <VuiBox display="flex" justifyContent="center">                           
-                    <VuiBox py={1} pr={2} width="300px">                    
+    <VuiBox pt={10} pb={10} px={3}>
+        <Card > 
+            <Grid container spacing={0}>
+                <Grid item display="flex" justifyContent="center" xs={12} md={6} xl={6}>   
+                    <VuiBox  py={1} px={1} width="300px">                    
                         <VuiInput 
                             id="date" 
                             type="text" 
@@ -220,7 +208,9 @@ function CoinCompare(props) {
                         >
                         </VuiInput>
                     </VuiBox> 
-                    <VuiBox py={1} pl={2} width="300px">                    
+                </Grid>  
+                <Grid item display="flex" justifyContent="center" xs={12} md={6} xl={6}> 
+                    <VuiBox  py={1} px={1} width="300px">                    
                         <VuiInput 
                             id="currentDate" 
                             type="tel" 
@@ -233,29 +223,34 @@ function CoinCompare(props) {
                         >
                         </VuiInput>
                     </VuiBox> 
-                </VuiBox>    
-                <VuiBox display="flex" justifyContent="center" width="100%" mt={2}>
+                </Grid> 
+            </Grid>           
+            <Grid pt={3} container spacing={0}>
+                <Grid item display="flex" justifyContent="center" xs={2} md={2} xl={3}>   
                     {showJudgeValue && 
-                        <VuiBox display="flex" justifyContent="center" alignItems="center" width="30%">
-                            <img
-                                loading="lazy"                        
-                                src={props.firstCoinImage}                                            
-                                alt=""    
-                                style={{width:"3rem", height:"3rem", marginRight:"1rem"}}                   
-                            />
-                        </VuiBox>
-                    }       
-                    <VuiBox display="flex" flexDirection="column" justifyContent="center" alignItems="center" width="40%" pb={2}>
-                        <VuiButton id="judgeButton" variant="gradient" color="info" size="small" fullWidth  onClick={judgeCoin} >
+                            <VuiBox display="flex" justifyContent="center" alignItems="center" width="30%">
+                                <img
+                                    loading="lazy"                        
+                                    src={props.firstCoinImage}                                            
+                                    alt=""    
+                                    style={{width:"3rem", height:"3rem", marginRight:"1rem"}}                   
+                                />
+                            </VuiBox>
+                    }  
+                </Grid>
+                <Grid item display="flex" justifyContent="center" xs={8} md={8} xl={6}>       
+                    <VuiBox display="flex" flexDirection="column" justifyContent="center" alignItems="center" width="100%" pb={2}>
+                        <VuiButton id="judgeButton" variant="gradient" color="info" size="small"  fullWidth sx={{maxWidth:"280px"}} onClick={judgeCoin} >
                             Please pump my bags!
                         </VuiButton>
                         {showJudgeValue && 
                             <h3 id="judgeValue" style={{color:"white", marginTop:"1rem"}}>
-                                {/* {props.swapped? (-1) * judgeValue: judgeValue} */}
                                 {judgeValue + ' ' }pumps
                             </h3>
                         }
                     </VuiBox>
+                </Grid>
+                <Grid item display="flex" justifyContent="center" xs={2} md={2} xl={3}>      
                     {showJudgeValue && 
                         <VuiBox display="flex" justifyContent="center" alignItems="center" width="30%">
                             <img
@@ -266,35 +261,10 @@ function CoinCompare(props) {
                             />    
                         </VuiBox>
                     }
-                    {
-                        // showJudgeValue && <VuiBox display="flex" flexDirection="column" alignItems="center" justifyContent="center" pb={1} >                       
-                        //     <VuiBox>                            
-                        //         <VuiBox display="flex" flexDirection="row" alignItems="center" justifyContent="flex-end">
-                        //             <img
-                        //                 loading="lazy"                        
-                        //                 src={props.firstCoinImage}                                            
-                        //                 alt=""    
-                        //                 style={{width:"2rem", height:"2rem", marginRight:"1rem"}}                   
-                        //             />
-                        //             <h3 id="judgeValue" style={{color:"white"}}>
-                        //                 {/* {props.swapped? (-1) * judgeValue: judgeValue} */}
-                        //                 {judgeValue + ' ' }pumps
-                        //             </h3>
-                        //             <img
-                        //                 loading="lazy"                        
-                        //                 src={props.secondCoinImage}                                            
-                        //                 alt=""    
-                        //                 style={{width:"2rem", height:"2rem", marginLeft:"1rem"}}                   
-                        //             />                                                   
-                        //         </VuiBox>
-                        //     </VuiBox>
-                        // </VuiBox>
-                    }
-                </VuiBox>
-            </VuiBox>
+                </Grid>
+            </Grid>    
         </Card>
-    </VuiBox>
-   
+    </VuiBox>   
   );
 }
 

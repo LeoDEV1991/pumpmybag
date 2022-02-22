@@ -30,6 +30,7 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import Icon from "@mui/material/Icon";
+import Grid from "@mui/material/Grid";
 
 // Vision UI Dashboard React components
 import VuiBox from "components/VuiBox";
@@ -149,78 +150,86 @@ function DashboardNavbar({ absolute, light, isMini, changeState }) {
       sx={(theme) => navbar(theme, { transparentNavbar, absolute, light })}
     >
       <Toolbar sx={(theme) => navbarContainer(theme)}>
-        <VuiBox color="inherit" mb={{ xs: 1, md: 0 }} sx={(theme) => navbarRow(theme, { isMini })}>
-          {/* <Breadcrumbs icon="home" title={route[route.length - 1]} route={route} light={light} /> */}
-          <Breadcrumbs icon="home" title="PumpMyBag" route={route} light={light} />
-        </VuiBox>
-        {isMini ? null : (
-          <VuiBox sx={(theme) => navbarRow(theme, { isMini })}>
-            {/* <VuiBox pr={1}>
-              <VuiInput
-                placeholder="Type here..."
-                icon={{ component: "search", direction: "left" }}
-                sx={({ breakpoints }) => ({
-                  [breakpoints.down("sm")]: {
-                    maxWidth: "80px",
-                  },
-                  [breakpoints.only("sm")]: {
-                    maxWidth: "80px",
-                  },
-                  backgroundColor: "info.main !important",
-                })}
-              />
-            </VuiBox> */}
-            <VuiBox color={light ? "white" : "inherit"}>
-              {/* <Link to="/authentication/sign-in">
-                <IconButton sx={navbarIconButton} size="small">
-                  <Icon
-                    sx={({ palette: { dark, white } }) => ({
-                      color: light ? white.main : dark.main,
-                    })}
-                  >
-                    account_circle
-                  </Icon>
-                  <VuiTypography
-                    variant="button"
-                    fontWeight="medium"
-                    color={light ? "white" : "dark"}
-                  >
-                    Sign in
-                  </VuiTypography>
-                </IconButton>
-              </Link> */}
-              {/* <IconButton
-                size="small"
-                color="inherit"
-                sx={navbarMobileMenu}
-                onClick={handleMiniSidenav}
-              >
-                <Icon className={"text-white"}>{miniSidenav ? "menu_open" : "menu"}</Icon>
-              </IconButton> */}
-              <IconButton
-                size="medium"
-                color="inherit"
-                sx={navbarIconButton}
-                // onClick={handleConfiguratorOpen}
-                onClick={handleHelpClick}
-              >
-                <Icon>help</Icon>
-              </IconButton>
-              {/* <IconButton
-                size="small"
-                color="inherit"
-                sx={navbarIconButton}
-                aria-controls="notification-menu"
-                aria-haspopup="true"
-                variant="contained"
-                onClick={handleOpenMenu}
-              >
-                <Icon className={light ? "text-white" : "text-dark"}>notifications</Icon>
-              </IconButton> */}
-              {renderMenu()}
+        <Grid container spacing={0}>
+          <Grid item xs={11} md={10} xl={10}> 
+            <VuiBox color="inherit" mb={{ xs: 1, md: 0 }} sx={(theme) => navbarRow(theme, { isMini })}>
+              {/* <Breadcrumbs icon="home" title={route[route.length - 1]} route={route} light={light} /> */}
+              <Breadcrumbs icon="home" title="PumpMyBag" route={route} light={light} />
             </VuiBox>
-          </VuiBox>
-        )}
+          </Grid>
+          <Grid item xs={1} md={2} xl={2} display="flex" justifyContent="end" > 
+            
+              {isMini ? null : (
+                <VuiBox sx={(theme) => navbarRow(theme, { isMini })}>
+                  {/* <VuiBox pr={1}>
+                    <VuiInput
+                      placeholder="Type here..."s
+                      icon={{ component: "search", direction: "left" }}
+                      sx={({ breakpoints }) => ({
+                        [breakpoints.down("sm")]: {
+                          maxWidth: "80px",
+                        },
+                        [breakpoints.only("sm")]: {
+                          maxWidth: "80px",
+                        },
+                        backgroundColor: "info.main !important",
+                      })}
+                    />
+                  </VuiBox> */}
+                  <VuiBox color={light ? "white" : "inherit"}>
+                    {/* <Link to="/authentication/sign-in">
+                      <IconButton sx={navbarIconButton} size="small">
+                        <Icon
+                          sx={({ palette: { dark, white } }) => ({
+                            color: light ? white.main : dark.main,
+                          })}
+                        >
+                          account_circle
+                        </Icon>
+                        <VuiTypography
+                          variant="button"
+                          fontWeight="medium"
+                          color={light ? "white" : "dark"}
+                        >
+                          Sign in
+                        </VuiTypography>
+                      </IconButton>
+                    </Link> */}
+                    {/* <IconButton
+                      size="small"
+                      color="inherit"
+                      sx={navbarMobileMenu}
+                      onClick={handleMiniSidenav}
+                    >
+                      <Icon className={"text-white"}>{miniSidenav ? "menu_open" : "menu"}</Icon>
+                    </IconButton> */}
+                    <IconButton
+                      size="medium"
+                      color="inherit"
+                      sx={navbarIconButton}
+                      // onClick={handleConfiguratorOpen}
+                      onClick={handleHelpClick}
+                    >
+                      <Icon>help</Icon>
+                    </IconButton>
+                    {/* <IconButton
+                      size="small"
+                      color="inherit"
+                      sx={navbarIconButton}
+                      aria-controls="notification-menu"
+                      aria-haspopup="true"
+                      variant="contained"
+                      onClick={handleOpenMenu}
+                    >
+                      <Icon className={light ? "text-white" : "text-dark"}>notifications</Icon>
+                    </IconButton> */}
+                    {renderMenu()}
+                  </VuiBox>
+                </VuiBox>
+              )}
+            
+          </Grid>
+        </Grid>
       </Toolbar>
     </AppBar>
   );
