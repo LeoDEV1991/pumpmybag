@@ -1,7 +1,8 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
 # dependencies
 /node_modules
-/.pnp
-.pnp.js
+.DS_Store
 
 # testing
 /coverage
@@ -15,20 +16,12 @@
 .env.development.local
 .env.test.local
 .env.production.local
-.env
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-/tmp
-.idea
-.vscode
 
-bin/flatten.sh
+package-lock.json
+yarn.lock
 
-# Solidity
-/cache
-/artifacts
-
-typechain-types
-dist
+commit.sh
